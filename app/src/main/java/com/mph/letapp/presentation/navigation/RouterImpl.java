@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.mph.letapp.presentation.view.activity.TVShowDetailActivity;
+
 public class RouterImpl implements Router {
 
     @NonNull
@@ -22,5 +24,10 @@ public class RouterImpl implements Router {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         mContext.startActivity(intent);
+    }
+
+    @Override
+    public void openTVShow(String tvShowID) {
+        mContext.startActivity(TVShowDetailActivity.getNewIntent(mContext, tvShowID));
     }
 }
