@@ -13,7 +13,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public final class NetworkModule {
 
-    public static final String API_URL = "https://api.themoviedb.org/3/";
+    private static final String API_URL = "https://api.themoviedb.org/3/";
+
+    public static final String BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/w300";
+
+    public static final String POSTER_BASE_URL = "https://image.tmdb.org/t/p/w154";
 
     @Provides
     @Singleton

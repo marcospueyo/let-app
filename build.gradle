@@ -29,6 +29,7 @@ ext {
     multidexVersion = '1.0.2'
     supportLibraryVersion = '27.0.1'
     contraintLayoutVersion = '1.0.2'
+    glideVersion = '4.5.0'
     retrofitVersion = '2.3.0'
     okhttpVersion = '3.6.0'
     eventbusVersion = '3.0.0'
