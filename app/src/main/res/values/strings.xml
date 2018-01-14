@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Letgo challenge</string>
+    <string name="entities_load_error">An error occurred while trying to load the repositories</string>
+</resources>

@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    minSdkVersion = 15
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.1'
+
+    // App dependencies
+    multidexVersion = '1.0.2'
+    supportLibraryVersion = '27.0.1'
+    contraintLayoutVersion = '1.0.2'
+    retrofitVersion = '2.3.0'
+    okhttpVersion = '3.6.0'
+    eventbusVersion = '3.0.0'
+    butterknifeVersion = '8.8.1'
+    autovalueVersion = '1.5'
+    requeryVersion = '1.4.1'
+    daggerVersion = '2.13'
+    rxAndroidVersion = '2.0.1'
+    rxJavaVersion = '2.1.7'
+    jUnitVersion = '4.12'
+    mockitoVersion = '1.10.19'
+    dexmakerVersion = '1.2'
+    powerMockito = '1.6.2'
+    runnerVersion = '0.5'
+    espressoVersion = '3.0.1'
+    hamcrestVersion = '1.3'
+}

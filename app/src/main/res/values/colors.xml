@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_dark">#303F9F</color>
+    <color name="accentColor">#1e88e5</color>
+    <color name="brand_color">#ff3f55</color>
+
+    <color name="brand_color_brighter">#beff45</color>
+    <color name="brand_color_pale">#d9ff92</color>
+    <color name="brand_color_dark">#6c7f49</color>
+
+    <color name="gray_dark">@android:color/darker_gray</color>
+    <color name="black">@android:color/black</color>
+
+    <color name="red">#e53935</color>
+    <color name="blue">#1e88e5</color>
+    <color name="green_light">#7cb342</color>
+    <color name="pink">#d81b60</color>
+    <color name="cyan">#00acc1</color>
+    <color name="green">#43a047</color>
+    <color name="purple">#8e24aa</color>
+    <color name="blue_light">#039be5</color>
+    <color name="teal">#00897b</color>
+    <color name="purple_deep">#5e35b1</color>
+    <color name="indigo">#3949ab</color>
+
+    <color name="white">#f7f7f3</color>
+
+    <string-array name="color_palette">
+        <item>@color/red</item>
+        <item>@color/blue</item>
+        <item>@color/green_light</item>
+        <item>@color/pink</item>
+        <item>@color/cyan</item>
+        <item>@color/green</item>
+        <item>@color/purple</item>
+        <item>@color/blue_light</item>
+        <item>@color/teal</item>
+        <item>@color/purple_deep</item>
+        <item>@color/indigo</item>
+    </string-array>
+</resources>
