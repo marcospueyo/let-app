@@ -7,10 +7,15 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public interface TVShowRepository {
 
     Observable<List<TVShow>> getAll();
+
+    Single<TVShow> getTVShow(String id);
+
+    Observable<TVShow> getLocalEntityObs(String id);
 
     Observable<List<TVShow>> getTVShowPage(int page, int maxCount);
 

@@ -7,6 +7,9 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 
@@ -40,12 +43,38 @@ public class TVShowDaoImpl implements TVShowDao {
 
 
     @Override
-    public TVShow getTVShow(String id) {
-        return mDataStore
-                .select(TVShow.class)
-                .where(TVShow.ID.eq(id))
-                .get()
-                .firstOrNull();
+    public Single<TVShow> getTVShow(final String id) {
+        return Single.create(new SingleOnSubscribe<TVShow>() {
+            @Override
+            public void subscribe(SingleEmitter<TVShow> e) throws Exception {
+                TVShow tvShow = mDataStore
+                        .select(TVShow.class)
+                        .where(TVShow.ID.eq(id))
+                        .get()
+                        .firstOrNull();
+                if (tvShow != null) {
+                    e.onSuccess(tvShow);
+                }
+                else {
+                    e.onError(new Throwable("No entity with id " + id));
+                }
+            }
+        });
+    }
+
+    @Override
+    public Observable<TVShow> getTVShowObs(final String id) {
+        return Observable.create(new ObservableOnSubscribe<TVShow>() {
+            @Override
+            public void subscribe(ObservableEmitter<TVShow> e) throws Exception {
+                e.onNext(mDataStore
+                        .select(TVShow.class)
+                        .where(TVShow.ID.eq(id))
+                        .get()
+                        .firstOrNull());
+                e.onComplete();
+            }
+        });
     }
 
     @Override
