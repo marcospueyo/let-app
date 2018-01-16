@@ -3,6 +3,7 @@
     <string name="tvshow_detail_label">TV Show details</string>
     <string name="entities_load_error">An error occurred while trying to load the TV Shows</string>
     <string name="entity_detail_load_error">An error occurred while trying to load the TV Show details</string>
+    <string name="tvshow_detail_no_similar">No similar shows have been found</string>
 
     <string name="tvshow_detail_title">Title</string>
     <string name="tvshow_detail_rating">Rating</string>

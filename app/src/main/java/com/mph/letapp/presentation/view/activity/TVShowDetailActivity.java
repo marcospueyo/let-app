@@ -148,6 +148,22 @@ public class TVShowDetailActivity extends DaggerActivity implements TVShowDetail
         mPresenter.onSwipeRight();
     }
 
+    @Override
+    public void showAvailablePreviousShow() {
+        ibLeft.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideAvailablePreviousShow() {
+        ibLeft.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showNoSimilarShows() {
+        Snackbar.make(findViewById(android.R.id.content),
+                getString(R.string.tvshow_detail_no_similar), Snackbar.LENGTH_SHORT).show();
+    }
+
     private void loadShowDetails() {
         if (getIntent().hasExtra(SHOW_ID_KEY)) {
             mShowID = getIntent().getStringExtra(SHOW_ID_KEY);
