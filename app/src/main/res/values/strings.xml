@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Letgo challenge</string>
     <string name="tvshow_detail_label">TV Show details</string>
-    <string name="entities_load_error">An error occurred while trying to load the repositories</string>
+    <string name="entities_load_error">An error occurred while trying to load the TV Shows</string>
+    <string name="entity_detail_load_error">An error occurred while trying to load the TV Show details</string>
+
+    <string name="tvshow_detail_title">Title</string>
+    <string name="tvshow_detail_rating">Rating</string>
+    <string name="tvshow_detail_description">Overview</string>
 </resources>
