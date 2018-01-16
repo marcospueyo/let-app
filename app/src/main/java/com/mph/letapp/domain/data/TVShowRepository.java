@@ -19,6 +19,8 @@ public interface TVShowRepository {
 
     Observable<List<TVShow>> getTVShowPage(int page, int maxCount);
 
+    Observable<List<TVShow>> getSimilarTVShows(String tvShowID, int page, int maxCount);
+
     Completable fetchRemoteTVShows(int page, int maxCount);
 
     Completable clearTVShows();

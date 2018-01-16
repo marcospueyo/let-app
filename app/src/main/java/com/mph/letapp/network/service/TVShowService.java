@@ -10,4 +10,6 @@ import io.reactivex.Observable;
 public interface TVShowService {
 
     Observable<List<RestTVShow>> getTVShows(int page, int tvShowsPerPage);
+
+    Observable<List<RestTVShow>> getSimilarTVShows(String tvShowID, int page, int tvShowsPerPage);
 }

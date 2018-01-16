@@ -3,6 +3,7 @@ package com.mph.letapp.di.activity;
 import android.app.Activity;
 import android.content.Context;
 
+import com.mph.letapp.domain.interactor.GetSimilarTVShowsInteractor;
 import com.mph.letapp.domain.interactor.GetSingleTVShowInteractor;
 import com.mph.letapp.domain.interactor.GetTVShowsInteractor;
 import com.mph.letapp.presentation.TVShowDetailView;
@@ -63,11 +64,13 @@ public class ActivityModule {
     @Provides
     @ActivityScope
     TVShowDetailPresenter provideTVShowDetailPresenter(TVShowViewModelMapper tvShowViewModelMapper,
-                                                       Router router,
-                                                       GetSingleTVShowInteractor getSingleTVShowInteractor) {
+                                       Router router,
+                                       GetSingleTVShowInteractor getSingleTVShowInteractor,
+                                       GetSimilarTVShowsInteractor getSimilarTVShowsInteractor) {
         final TVShowDetailPresenter tvShowDetailPresenter =
                 new TVShowDetailPresenterImpl((TVShowDetailView) daggerActivity,
-                        tvShowViewModelMapper, router, getSingleTVShowInteractor);
+                        tvShowViewModelMapper, router, getSingleTVShowInteractor,
+                        getSimilarTVShowsInteractor, ELEMENTS_PER_PAGE);
         daggerActivity.getActivityComponent().inject(tvShowDetailPresenter);
         return tvShowDetailPresenter;
     }

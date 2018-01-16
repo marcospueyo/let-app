@@ -1,5 +1,7 @@
 package com.mph.letapp.di.application.module;
 
+import com.mph.letapp.domain.interactor.GetSimilarTVShowsInteractor;
+import com.mph.letapp.domain.interactor.GetSimilarTVShowsInteractorImpl;
 import com.mph.letapp.domain.interactor.GetSingleTVShowInteractor;
 import com.mph.letapp.domain.interactor.GetSingleTVShowInteractorImpl;
 import com.mph.letapp.domain.interactor.GetTVShowsInteractor;
@@ -32,10 +34,20 @@ public final class InteractorModule {
         return new GetSingleTVShowInteractorImpl(tvShowRepository, mainThread, backgroundThread);
     }
 
+    @Provides
+    @Singleton
+    GetSimilarTVShowsInteractor provideGetSimilarTVShowsInteractor(TVShowRepository tvShowRepository,
+                         @Named(ThreadingModule.MAIN_SCHEDULER) Scheduler mainThread,
+                         @Named(ThreadingModule.BACKGROUND_SCHEDULER) Scheduler backgroundThread) {
+        return new GetSimilarTVShowsInteractorImpl(tvShowRepository, mainThread, backgroundThread);
+    }
+
     public interface Exposes {
 
         GetTVShowsInteractor getTVShowsInteractor();
 
         GetSingleTVShowInteractor getGetSingleTVShowInteractor();
+
+        GetSimilarTVShowsInteractor getGetSimilarTVShowsInteractor();
     }
 }

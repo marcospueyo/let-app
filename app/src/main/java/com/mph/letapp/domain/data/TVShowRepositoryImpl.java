@@ -68,6 +68,14 @@ public class TVShowRepositoryImpl implements TVShowRepository {
     }
 
     @Override
+    public Observable<List<TVShow>> getSimilarTVShows(String tvShowID, int page, int maxCount) {
+        return mTVShowService
+                .getSimilarTVShows(tvShowID, page, maxCount)
+                .map(mMapper.map())
+                .map(saveFetchedEntities());
+    }
+
+    @Override
     public Single<TVShow> getTVShow(String id) {
         return getLocalEntity(id);
     }

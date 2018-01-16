@@ -11,4 +11,10 @@ public interface TVShowDetailView {
     void hideProgress();
 
     void showLoadError();
+
+    void showAvailablePreviousShow();
+
+    void hideAvailablePreviousShow();
+
+    void showNoSimilarShows();
 }

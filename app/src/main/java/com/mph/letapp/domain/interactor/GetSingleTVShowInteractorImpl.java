@@ -13,7 +13,7 @@ import io.reactivex.Single;
 public class GetSingleTVShowInteractorImpl implements GetSingleTVShowInteractor {
 
     @SuppressWarnings("unused")
-    public static final String TAG = GetSingleTVShowInteractor.class.getSimpleName();
+    public static final String TAG = GetSingleTVShowInteractorImpl.class.getSimpleName();
 
 
     @NonNull
