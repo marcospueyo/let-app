@@ -41,41 +41,62 @@ public class TVShowServiceImpl implements TVShowService {
     public Observable<List<RestTVShow>> getTVShows(final int page, final int tvShowsPerPage) {
         return Observable.create(new ObservableOnSubscribe<List<RestTVShow>>() {
             @Override
-            public void subscribe(final ObservableEmitter<List<RestTVShow>> emitter) throws Exception {
+            public void subscribe(final ObservableEmitter<List<RestTVShow>> emitter)
+                    throws Exception {
                 int servicePage = page + 1; //page numbering is 1-based
                 Call<TVShowPageResponse> call = mTMDBService.getTVShows(mApiKey, mLanguage,
                         String.valueOf(servicePage));
-                call.enqueue(new Callback<TVShowPageResponse>() {
-                    @Override
-                    public void onResponse(Call<TVShowPageResponse> call,
-                                           Response<TVShowPageResponse> response) {
-                        if (response.isSuccessful()) {
-                            TVShowPageResponse tvShowPageResponse = response.body();
-                            List<RestTVShow> list;
-                            if (tvShowPageResponse != null) {
-                                list = tvShowPageResponse.getTvshowList();
-                            }
-                            else {
-                                list = Collections.emptyList();
-                            }
-                            emitter.onNext(list);
-                            emitter.onComplete();
-                        }
-                        else {
-                            handleFetchFailed(emitter);
-                        }
-                    }
+                call.enqueue(getTVShowListCallback(emitter));
+        }
+        });
+    }
 
-                    @Override
-                    public void onFailure(Call<TVShowPageResponse> call, Throwable t) {
-                        handleFetchFailed(emitter);
-                    }
-                });
+    @Override
+    public Observable<List<RestTVShow>> getSimilarTVShows(final String tvShowID, final int page,
+                                                          final int tvShowsPerPage) {
+        return Observable.create(new ObservableOnSubscribe<List<RestTVShow>>() {
+            @Override
+            public void subscribe(final ObservableEmitter<List<RestTVShow>> emitter)
+                    throws Exception {
+                int servicePage = page + 1; //page numbering is 1-based
+                Call<TVShowPageResponse> call = mTMDBService.getSimilarTVShows(tvShowID, mApiKey,
+                        mLanguage, String.valueOf(servicePage));
+                call.enqueue(getTVShowListCallback(emitter));
             }
         });
     }
 
-    private void handleFetchFailed(ObservableEmitter<List<RestTVShow>> emitter) {
+    private Callback<TVShowPageResponse> getTVShowListCallback(
+            final ObservableEmitter<List<RestTVShow>> emitter) {
+        return new Callback<TVShowPageResponse>() {
+            @Override
+            public void onResponse(Call<TVShowPageResponse> call,
+                                   Response<TVShowPageResponse> response) {
+                if (response.isSuccessful()) {
+                    TVShowPageResponse tvShowPageResponse = response.body();
+                    List<RestTVShow> list;
+                    if (tvShowPageResponse != null) {
+                        list = tvShowPageResponse.getTvshowList();
+                    }
+                    else {
+                        list = Collections.emptyList();
+                    }
+                    emitter.onNext(list);
+                    emitter.onComplete();
+                } else {
+                    handleFetchFailed(emitter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TVShowPageResponse> call, Throwable t) {
+                handleFetchFailed(emitter);
+            }
+
+        };
+    }
+
+    private void handleFetchFailed(final ObservableEmitter<List<RestTVShow>> emitter) {
         emitter.onError(new Throwable("TMDB service fetch failed"));
     }
 }
