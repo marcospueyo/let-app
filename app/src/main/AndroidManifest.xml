@@ -14,8 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".presentation.view.activity.TVShowListActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,8 +24,7 @@
         <activity
             android:name=".presentation.view.activity.TVShowDetailActivity"
             android:label="@string/tvshow_detail_label"
-            android:parentActivityName=".presentation.view.activity.TVShowListActivity"
-            android:screenOrientation="portrait">
+            android:parentActivityName=".presentation.view.activity.TVShowListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.view.activity.TVShowListActivity"/>
