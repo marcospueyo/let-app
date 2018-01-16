@@ -16,7 +16,6 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
 
@@ -81,12 +80,12 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
 
     @Override
     public void onSwipeLeft() {
-
+        Log.d(TAG, "onSwipeLeft: ");
     }
 
     @Override
     public void onSwipeRight() {
-
+        Log.d(TAG, "onSwipeRight: ");
     }
 
     private void loadTVShow() {

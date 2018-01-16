@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,6 +24,8 @@ import com.mph.letapp.di.activity.DaggerActivity;
 import com.mph.letapp.presentation.TVShowDetailView;
 import com.mph.letapp.presentation.model.TVShowViewModel;
 import com.mph.letapp.presentation.presenter.TVShowDetailPresenter;
+import com.mph.letapp.presentation.view.component.SwipeDetector;
+import com.mph.letapp.presentation.view.component.TouchableLinearLayout;
 
 import java.util.Locale;
 
@@ -30,7 +36,8 @@ import butterknife.ButterKnife;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
-public class TVShowDetailActivity extends DaggerActivity implements TVShowDetailView {
+public class TVShowDetailActivity extends DaggerActivity implements TVShowDetailView,
+        SwipeDetector.SwipeListener {
 
     public static final String SHOW_ID_KEY = "show_id";
 
@@ -46,6 +53,13 @@ public class TVShowDetailActivity extends DaggerActivity implements TVShowDetail
     @BindView(R.id.tv_description) TextView tvDescription;
 
     @BindView(R.id.tv_rating) TextView tvRating;
+
+    @BindView(R.id.ll_swipe_area)
+    TouchableLinearLayout llSwipeArea;
+
+    @BindView(R.id.ib_left) ImageButton ibLeft;
+
+    @BindView(R.id.ib_right) ImageButton ibRight;
 
     @Inject
     TVShowDetailPresenter mPresenter;
@@ -68,6 +82,7 @@ public class TVShowDetailActivity extends DaggerActivity implements TVShowDetail
         loadShowDetails();
         initializePresenter();
         initializeRequestManager();
+        initializeSwipingListeners();
     }
 
     @Override
@@ -123,6 +138,16 @@ public class TVShowDetailActivity extends DaggerActivity implements TVShowDetail
                 getString(R.string.entity_detail_load_error), Snackbar.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onSwipeLeft() {
+        mPresenter.onSwipeLeft();
+    }
+
+    @Override
+    public void onSwipeRight() {
+        mPresenter.onSwipeRight();
+    }
+
     private void loadShowDetails() {
         if (getIntent().hasExtra(SHOW_ID_KEY)) {
             mShowID = getIntent().getStringExtra(SHOW_ID_KEY);
@@ -137,6 +162,22 @@ public class TVShowDetailActivity extends DaggerActivity implements TVShowDetail
 
     private void initializeRequestManager() {
         mRequestManager = Glide.with(this);
+    }
+
+    private void initializeSwipingListeners() {
+        ibLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.onSwipeLeft();
+            }
+        });
+        ibRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.onSwipeRight();
+            }
+        });
+        llSwipeArea.setOnTouchListener(new SwipeDetector(100, this));
     }
 
     private void renderLogo(String image) {

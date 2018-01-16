@@ -16,6 +16,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/ll_content"
+            android:longClickable="false"
+            android:clickable="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -24,11 +27,40 @@
             <android.support.v4.widget.Space
                 android:layout_width="0dp"
                 android:layout_height="@dimen/spacing_medium" />
-            <ImageView
-                android:id="@+id/iv_logo"
-                android:layout_width="@dimen/tvshow_detail_logo_size"
-                android:layout_height="@dimen/tvshow_detail_logo_size"
-                app:srcCompat="@drawable/ic_tv_placeholder" />
+            <com.mph.letapp.presentation.view.component.TouchableLinearLayout
+                android:id="@+id/ll_swipe_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <ImageButton
+                    android:id="@+id/ib_left"
+                    android:layout_width="@dimen/circle_size_medium"
+                    android:layout_height="@dimen/circle_size_medium"
+                    android:src="@drawable/ic_arrow_left"
+                    android:scaleType="fitCenter"
+                    android:background="@android:color/transparent"/>
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"/>
+                <ImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="@dimen/tvshow_detail_logo_size"
+                    android:layout_height="@dimen/tvshow_detail_logo_size"
+                    app:srcCompat="@drawable/ic_tv_placeholder" />
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"/>
+                <ImageButton
+                    android:id="@+id/ib_right"
+                    android:layout_width="@dimen/circle_size_medium"
+                    android:layout_height="@dimen/circle_size_medium"
+                    android:src="@drawable/ic_arrow_right"
+                    android:scaleType="fitCenter"
+                    android:background="@android:color/transparent"/>
+            </com.mph.letapp.presentation.view.component.TouchableLinearLayout>
             <android.support.v4.widget.Space
             android:layout_width="0dp"
             android:layout_height="@dimen/spacing_large" />
