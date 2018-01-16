@@ -7,6 +7,20 @@
         <item name="colorPrimaryDark">@color/brand_color</item>
         <item name="colorAccent">@color/accentColor</item>
     </style>
+
+    <style name="AppTheme.TextViewHeader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/brand_color</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="AppTheme.TextViewValue">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/textsize_medium</item>
+    </style>
 </resources>
 
 
