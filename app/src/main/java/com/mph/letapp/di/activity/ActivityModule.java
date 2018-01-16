@@ -3,10 +3,14 @@ package com.mph.letapp.di.activity;
 import android.app.Activity;
 import android.content.Context;
 
+import com.mph.letapp.domain.interactor.GetSingleTVShowInteractor;
 import com.mph.letapp.domain.interactor.GetTVShowsInteractor;
+import com.mph.letapp.presentation.TVShowDetailView;
 import com.mph.letapp.presentation.mapper.TVShowViewModelMapper;
 import com.mph.letapp.presentation.navigation.Router;
 import com.mph.letapp.presentation.navigation.RouterImpl;
+import com.mph.letapp.presentation.presenter.TVShowDetailPresenter;
+import com.mph.letapp.presentation.presenter.TVShowDetailPresenterImpl;
 import com.mph.letapp.presentation.presenter.TVShowListPresenter;
 import com.mph.letapp.presentation.presenter.TVShowListPresenterImpl;
 import com.mph.letapp.presentation.view.TVShowListView;
@@ -46,14 +50,26 @@ public class ActivityModule {
 
     @Provides
     @ActivityScope
-    TVShowListPresenter provideMainPresenter(TVShowViewModelMapper TVShowViewModelMapper,
+    TVShowListPresenter provideMainPresenter(TVShowViewModelMapper tvShowViewModelMapper,
                                              Router router,
                                              GetTVShowsInteractor getTVShowsInteractor) {
         final TVShowListPresenter TVShowListPresenter =
                 new TVShowListPresenterImpl((TVShowListView) daggerActivity, getTVShowsInteractor,
-                        TVShowViewModelMapper, router, ELEMENTS_PER_PAGE);
+                        tvShowViewModelMapper, router, ELEMENTS_PER_PAGE);
         daggerActivity.getActivityComponent().inject(TVShowListPresenter);
         return TVShowListPresenter;
+    }
+
+    @Provides
+    @ActivityScope
+    TVShowDetailPresenter provideTVShowDetailPresenter(TVShowViewModelMapper tvShowViewModelMapper,
+                                                       Router router,
+                                                       GetSingleTVShowInteractor getSingleTVShowInteractor) {
+        final TVShowDetailPresenter tvShowDetailPresenter =
+                new TVShowDetailPresenterImpl((TVShowDetailView) daggerActivity,
+                        tvShowViewModelMapper, router, getSingleTVShowInteractor);
+        daggerActivity.getActivityComponent().inject(tvShowDetailPresenter);
+        return tvShowDetailPresenter;
     }
 
     public interface Exposes {

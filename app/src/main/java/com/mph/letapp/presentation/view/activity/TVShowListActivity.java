@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.mph.letapp.R;
 import com.mph.letapp.di.activity.ActivityComponent;
 import com.mph.letapp.di.activity.DaggerActivity;
@@ -74,8 +76,12 @@ public class TVShowListActivity extends DaggerActivity implements TVShowListView
     }
 
     private void initializeAdapter() {
-        mAdapter = new TVShowAdapter(this, mPresenter);
+        mAdapter = new TVShowAdapter(this, mPresenter, getImageRequestManager());
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private RequestManager getImageRequestManager() {
+        return Glide.with(this);
     }
 
     private void initScrollListener(final int elementsPerPage, final int scrollThreshold,

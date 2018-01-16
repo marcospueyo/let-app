@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.RequestManager;
 import com.mph.letapp.R;
 import com.mph.letapp.presentation.model.TVShowViewModel;
 import com.mph.letapp.presentation.presenter.TVShowListPresenter;
@@ -24,17 +25,23 @@ public class TVShowAdapter extends RecyclerView.Adapter<TVShowViewHolder> {
     @NonNull
     private final TVShowListPresenter mPresenter;
 
+    @NonNull
+    private final RequestManager mRequestManager;
+
     private List<TVShowViewModel> mItemList;
 
-    public TVShowAdapter(@NonNull Context context, @NonNull TVShowListPresenter presenter) {
+    public TVShowAdapter(@NonNull Context context, @NonNull TVShowListPresenter presenter,
+                         @NonNull RequestManager requestManager) {
         mContext = context;
         mPresenter = presenter;
+        mRequestManager = requestManager;
         mItemList = new ArrayList<>();
     }
 
     @Override
     public TVShowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new TVShowViewHolder(mContext, getInflatedItemView(parent), mPresenter);
+        return new TVShowViewHolder(mContext, getInflatedItemView(parent), mPresenter,
+                mRequestManager);
     }
 
     private View getInflatedItemView(ViewGroup viewGroup) {

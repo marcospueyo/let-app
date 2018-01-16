@@ -20,7 +20,7 @@ public final class MappersModule {
     @Provides
     @Singleton
     RestTVShowMapper provideRestTVShowMapper() {
-        return new RestTVShowMapper();
+        return new RestTVShowMapper(NetworkModule.POSTER_BASE_URL, NetworkModule.BACKDROP_BASE_URL);
     }
 
     public interface Exposes {

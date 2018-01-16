@@ -1,5 +1,6 @@
 package com.mph.letapp;
 
+import com.mph.letapp.di.application.module.NetworkModule;
 import com.mph.letapp.domain.data.TVShowRepositoryImpl;
 import com.mph.letapp.domain.data.model.TVShow;
 import com.mph.letapp.domain.data.model.TVShowDao;
@@ -54,7 +55,8 @@ public final class TVShowRepositoryImplTest {
     public void setUp() throws Exception {
         mTVShowDao = mock(TVShowDao.class);
         mTVShowService = mock(TVShowService.class);
-        mMapper = new RestTVShowMapper();
+        mMapper = new RestTVShowMapper(NetworkModule.POSTER_BASE_URL,
+                NetworkModule.BACKDROP_BASE_URL);
         mBackgroundScheduler = new TestScheduler();
         page = 1;
         elementsPerPage = 10;

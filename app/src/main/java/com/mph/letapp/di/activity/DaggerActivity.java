@@ -21,12 +21,12 @@ public abstract class DaggerActivity extends AppCompatActivity {
     public ActivityComponent getActivityComponent() {
         if (activityComponent == null) {
             activityComponent = ComponentFactory.createActivityComponent(this,
-                    getXaccApplication());
+                    getLetApplication());
         }
         return activityComponent;
     }
 
-    private LetApplication getXaccApplication() {
+    private LetApplication getLetApplication() {
         return ((LetApplication) getApplication());
     }
 

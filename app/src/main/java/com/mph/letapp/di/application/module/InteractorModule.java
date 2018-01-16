@@ -1,5 +1,7 @@
 package com.mph.letapp.di.application.module;
 
+import com.mph.letapp.domain.interactor.GetSingleTVShowInteractor;
+import com.mph.letapp.domain.interactor.GetSingleTVShowInteractorImpl;
 import com.mph.letapp.domain.interactor.GetTVShowsInteractor;
 import com.mph.letapp.domain.interactor.GetTVShowsInteractorImpl;
 import com.mph.letapp.domain.data.TVShowRepository;
@@ -22,7 +24,18 @@ public final class InteractorModule {
         return new GetTVShowsInteractorImpl(TVShowRepository, mainThread, backgroundThread);
     }
 
+    @Provides
+    @Singleton
+    GetSingleTVShowInteractor provideGetSingleTVShowInteractor(TVShowRepository tvShowRepository,
+                       @Named(ThreadingModule.MAIN_SCHEDULER) Scheduler mainThread,
+                       @Named(ThreadingModule.BACKGROUND_SCHEDULER) Scheduler backgroundThread) {
+        return new GetSingleTVShowInteractorImpl(tvShowRepository, mainThread, backgroundThread);
+    }
+
     public interface Exposes {
+
         GetTVShowsInteractor getTVShowsInteractor();
+
+        GetSingleTVShowInteractor getGetSingleTVShowInteractor();
     }
 }

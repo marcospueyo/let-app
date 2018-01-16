@@ -12,6 +12,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
+import io.reactivex.Single;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
@@ -67,6 +68,11 @@ public class TVShowRepositoryImpl implements TVShowRepository {
     }
 
     @Override
+    public Single<TVShow> getTVShow(String id) {
+        return getLocalEntity(id);
+    }
+
+    @Override
     public Completable fetchRemoteTVShows(final int page, final int maxCount) {
         return Completable.fromObservable(
                 fetchFromRemoteStore(page, maxCount)
@@ -91,6 +97,14 @@ public class TVShowRepositoryImpl implements TVShowRepository {
     private Observable<List<TVShow>> getLocalEntitiesObservable(final int page,
                                                                 final int elementsPerPage) {
         return mTVShowDao.getTVShows(page, elementsPerPage);
+    }
+
+    private Single<TVShow> getLocalEntity(String id) {
+        return mTVShowDao.getTVShow(id);
+    }
+
+    public Observable<TVShow> getLocalEntityObs(String id) {
+        return mTVShowDao.getTVShowObs(id);
     }
 
     private void saveFetchedEntities(Iterable<TVShow> tvShows) {

@@ -67,7 +67,7 @@ public class TVShowListPresenterImpl implements TVShowListPresenter {
 
     @Override
     public void onTVShowSelected(TVShowViewModel tvShow) {
-
+        mRouter.openTVShow(tvShow.id());
     }
 
     @Override

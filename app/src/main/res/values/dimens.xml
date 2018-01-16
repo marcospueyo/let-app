@@ -18,6 +18,10 @@
     <dimen name="circle_size_small">30dp</dimen>
     <dimen name="circle_size_xsmall">10dp</dimen>
 
+    <dimen name="tvshow_logo_size">64dp</dimen>
+
+    <dimen name="tvshow_detail_logo_size">128dp</dimen>
+
     <dimen name="tvshowrow_height">70dp</dimen>
 
     <dimen name="button_size">25dp</dimen>
