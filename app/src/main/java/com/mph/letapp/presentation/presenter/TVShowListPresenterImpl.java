@@ -98,7 +98,6 @@ public class TVShowListPresenterImpl implements TVShowListPresenter {
                 .subscribe(new Observer<List<TVShow>>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.d(TAG, "onSubscribe: ");
             }
 
             @Override

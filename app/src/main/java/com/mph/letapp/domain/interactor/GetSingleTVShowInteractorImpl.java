@@ -28,7 +28,6 @@ public class GetSingleTVShowInteractorImpl implements GetSingleTVShowInteractor 
     public GetSingleTVShowInteractorImpl(@NonNull TVShowRepository tvShowRepository,
                                          @NonNull Scheduler mainThread,
                                          @NonNull Scheduler backgroundThread) {
-        Log.d(TAG, "GetSingleTVShowInteractorImpl: created");
         mTVShowRepository = tvShowRepository;
         mBackgroundThread = backgroundThread;
         mMainThread = mainThread;
