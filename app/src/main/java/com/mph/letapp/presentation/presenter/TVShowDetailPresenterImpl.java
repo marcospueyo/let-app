@@ -35,14 +35,9 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
     @NonNull
     GetSimilarTVShowsInteractor mGetSimilarTVShowsInteractor;
 
-    @NonNull
-    private final Router mRouter;
-
     private boolean mFetchInProcess;
 
     private String mOriginalTVShowID;
-
-    private String mCurrentTVShowID;
 
     private final int mTVShowsPerPage;
 
@@ -54,15 +49,12 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
 
     public TVShowDetailPresenterImpl(@NonNull TVShowDetailView view,
                                      @NonNull TVShowViewModelMapper mapper,
-                                     @NonNull Router router,
                                      @NonNull GetSingleTVShowInteractor getSingleTVShowInteractor,
                                      @NonNull GetSimilarTVShowsInteractor
                                              getSimilarTVShowsInteractor,
                                      int tvShowsPerPage) {
-        Log.d(TAG, "TVShowDetailPresenterImpl: created");
         mView = view;
         mMapper = mapper;
-        mRouter = router;
         mGetSingleTVShowInteractor = getSingleTVShowInteractor;
         mGetSimilarTVShowsInteractor = getSimilarTVShowsInteractor;
         mTVShowsPerPage = tvShowsPerPage;

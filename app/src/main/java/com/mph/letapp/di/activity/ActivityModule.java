@@ -64,12 +64,11 @@ public class ActivityModule {
     @Provides
     @ActivityScope
     TVShowDetailPresenter provideTVShowDetailPresenter(TVShowViewModelMapper tvShowViewModelMapper,
-                                       Router router,
                                        GetSingleTVShowInteractor getSingleTVShowInteractor,
                                        GetSimilarTVShowsInteractor getSimilarTVShowsInteractor) {
         final TVShowDetailPresenter tvShowDetailPresenter =
                 new TVShowDetailPresenterImpl((TVShowDetailView) daggerActivity,
-                        tvShowViewModelMapper, router, getSingleTVShowInteractor,
+                        tvShowViewModelMapper, getSingleTVShowInteractor,
                         getSimilarTVShowsInteractor, ELEMENTS_PER_PAGE);
         daggerActivity.getActivityComponent().inject(tvShowDetailPresenter);
         return tvShowDetailPresenter;
