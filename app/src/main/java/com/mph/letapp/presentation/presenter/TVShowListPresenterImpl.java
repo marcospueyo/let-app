@@ -14,6 +14,7 @@ import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 public class TVShowListPresenterImpl implements TVShowListPresenter {
 

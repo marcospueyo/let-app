@@ -103,8 +103,8 @@ public class TVShowDetailActivity extends DaggerActivity implements TVShowDetail
 
     @Override
     protected void onDestroy() {
-        mPresenter.destroy();
         super.onDestroy();
+        mPresenter.destroy();
     }
 
     @Override
