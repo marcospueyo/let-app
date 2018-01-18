@@ -26,7 +26,7 @@ public class GetSimilarTVShowsInteractorImpl implements GetSimilarTVShowsInterac
     @NonNull
     private final Scheduler mMainThread;
 
-    private final CompositeDisposable mCompositeDisposable;
+    private CompositeDisposable mCompositeDisposable;
 
     public GetSimilarTVShowsInteractorImpl(@NonNull TVShowRepository tvShowRepository,
                                            @NonNull Scheduler mainThread,
@@ -34,7 +34,6 @@ public class GetSimilarTVShowsInteractorImpl implements GetSimilarTVShowsInterac
         mTVShowRepository = tvShowRepository;
         mBackgroundThread = backgroundThread;
         mMainThread = mainThread;
-        mCompositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -45,13 +44,20 @@ public class GetSimilarTVShowsInteractorImpl implements GetSimilarTVShowsInterac
                 .subscribeOn(mBackgroundThread)
                 .observeOn(mMainThread);
         final DisposableObserver observer = observable.subscribeWith(disposableObserver);
-        mCompositeDisposable.add(observer);
+        getCompositeDisposable().add(observer);
     }
 
     @Override
     public void dispose() {
-        if (!mCompositeDisposable.isDisposed()) {
-//            mCompositeDisposable.dispose();
+        if (mCompositeDisposable != null && !mCompositeDisposable.isDisposed()) {
+            mCompositeDisposable.dispose();
         }
+    }
+
+    private CompositeDisposable getCompositeDisposable() {
+        if (mCompositeDisposable == null || mCompositeDisposable.isDisposed()) {
+            mCompositeDisposable = new CompositeDisposable();
+        }
+        return mCompositeDisposable;
     }
 }
