@@ -40,30 +40,8 @@ public class TVShowDaoImpl implements TVShowDao {
         });
     }
 
-
-
     @Override
-    public Single<TVShow> getTVShow(final String id) {
-        return Single.create(new SingleOnSubscribe<TVShow>() {
-            @Override
-            public void subscribe(SingleEmitter<TVShow> e) throws Exception {
-                TVShow tvShow = mDataStore
-                        .select(TVShow.class)
-                        .where(TVShow.ID.eq(id))
-                        .get()
-                        .firstOrNull();
-                if (tvShow != null) {
-                    e.onSuccess(tvShow);
-                }
-                else {
-                    e.onError(new Throwable("No entity with id " + id));
-                }
-            }
-        });
-    }
-
-    @Override
-    public Observable<TVShow> getTVShowObs(final String id) {
+    public Observable<TVShow> getTVShow(final String id) {
         return Observable.create(new ObservableOnSubscribe<TVShow>() {
             @Override
             public void subscribe(ObservableEmitter<TVShow> e) throws Exception {

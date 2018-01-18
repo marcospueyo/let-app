@@ -76,11 +76,6 @@ public class TVShowRepositoryImpl implements TVShowRepository {
     }
 
     @Override
-    public Single<TVShow> getTVShow(String id) {
-        return getLocalEntity(id);
-    }
-
-    @Override
     public Completable fetchRemoteTVShows(final int page, final int maxCount) {
         return Completable.fromObservable(
                 fetchFromRemoteStore(page, maxCount)
@@ -107,12 +102,8 @@ public class TVShowRepositoryImpl implements TVShowRepository {
         return mTVShowDao.getTVShows(page, elementsPerPage);
     }
 
-    private Single<TVShow> getLocalEntity(String id) {
+    public Observable<TVShow> getTVShow(String id) {
         return mTVShowDao.getTVShow(id);
-    }
-
-    public Observable<TVShow> getLocalEntityObs(String id) {
-        return mTVShowDao.getTVShowObs(id);
     }
 
     private void saveFetchedEntities(Iterable<TVShow> tvShows) {

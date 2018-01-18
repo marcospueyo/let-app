@@ -11,10 +11,6 @@ import com.mph.letapp.presentation.model.TVShowViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 
 public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
@@ -82,6 +78,7 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
     @Override
     public void destroy() {
         mGetSimilarTVShowsInteractor.dispose();
+        mGetSingleTVShowInteractor.dispose();
         mView = null;
     }
 
@@ -124,6 +121,11 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
         mTVShows.addAll(list);
     }
 
+    private void handleFetchedSingleShow(TVShow tvShow) {
+        saveOriginalTVShow(mMapper.reverseMap(tvShow));
+        showOriginalTVShow();
+    }
+
     private void saveOriginalTVShow(TVShowViewModel tvShow) {
         if (mTVShows.size() > 0) {
             mTVShows.set(0, tvShow);
@@ -163,24 +165,8 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
 
     private void loadTVShow() {
         handleFetchStarted();
-
-        mGetSingleTVShowInteractor
-            .execute(mOriginalTVShowID, false)
-            .doOnSuccess(new Consumer<TVShow>() {
-                @Override
-                public void accept(TVShow tvShow) throws Exception {
-                    handleFetchEnded();
-                    saveOriginalTVShow(mMapper.reverseMap(tvShow));
-                    showOriginalTVShow();
-                }
-            })
-            .doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(Throwable throwable) throws Exception {
-                    handleFetchEnded();
-                    updateViewWithLoadError();
-                }
-        }).subscribe();
+        mGetSingleTVShowInteractor.execute(new SingleTVShowObserver(), mOriginalTVShowID,
+                false);
     }
 
     private void loadSimilarTVShows() {
@@ -230,6 +216,26 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
         public void onNext(List<TVShow> tvShows) {
             TVShowDetailPresenterImpl.this.handleFetchEnded();
             TVShowDetailPresenterImpl.this.handleFetchedData(tvShows);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            TVShowDetailPresenterImpl.this.handleFetchEnded();
+            TVShowDetailPresenterImpl.this.updateViewWithLoadError();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    }
+
+    private final class SingleTVShowObserver extends DisposableObserver<TVShow> {
+
+        @Override
+        public void onNext(TVShow tvShow) {
+            TVShowDetailPresenterImpl.this.handleFetchEnded();
+            TVShowDetailPresenterImpl.this.handleFetchedSingleShow(tvShow);
         }
 
         @Override
