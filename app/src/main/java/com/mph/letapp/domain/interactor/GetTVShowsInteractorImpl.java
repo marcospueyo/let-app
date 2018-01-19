@@ -10,10 +10,9 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 
-public class GetTVShowsInteractorImpl implements GetTVShowsInteractor {
+public class GetTVShowsInteractorImpl extends Interactor<List<TVShow>> implements GetTVShowsInteractor {
 
     @SuppressWarnings("unused")
     private static final String TAG = GetTVShowsInteractorImpl.class.getSimpleName();
@@ -21,20 +20,11 @@ public class GetTVShowsInteractorImpl implements GetTVShowsInteractor {
     @NonNull
     private final TVShowRepository mTVShowRepository;
 
-    @NonNull
-    private final Scheduler mBackgroundThread;
-
-    @NonNull
-    private final Scheduler mMainThread;
-
-    private CompositeDisposable mCompositeDisposable;
-
     public GetTVShowsInteractorImpl(@NonNull TVShowRepository TVShowRepository,
                                     @NonNull Scheduler mainThread,
                                     @NonNull Scheduler backgroundThread) {
+        super(mainThread, backgroundThread);
         mTVShowRepository = TVShowRepository;
-        mBackgroundThread = backgroundThread;
-        mMainThread = mainThread;
     }
 
     @Override
@@ -42,18 +32,8 @@ public class GetTVShowsInteractorImpl implements GetTVShowsInteractor {
                         int elementsPerPage, int page) {
         Observable<List<TVShow>> observable = handleForceRefresh(forceRefresh)
                 .andThen(fetchIfNeeded(forceRefresh, elementsPerPage, page))
-                .andThen(mTVShowRepository.getTVShowPage(page, elementsPerPage))
-                .subscribeOn(mBackgroundThread)
-                .observeOn(mMainThread);
-        final DisposableObserver observer = observable.subscribeWith(disposableObserver);
-        getCompositeDisposable().add(observer);
-    }
-
-    @Override
-    public void dispose() {
-        if (mCompositeDisposable != null && !mCompositeDisposable.isDisposed()) {
-            mCompositeDisposable.dispose();
-        }
+                .andThen(mTVShowRepository.getTVShowPage(page, elementsPerPage));
+        subscribeObserver(observable, disposableObserver);
     }
 
     private Completable handleForceRefresh(final boolean forceRefresh) {
@@ -78,12 +58,5 @@ public class GetTVShowsInteractorImpl implements GetTVShowsInteractor {
 
     private boolean shouldLoadFromRemoteStore(boolean forceRefresh, int page, int elementsPerPage) {
         return forceRefresh || (mTVShowRepository.localTVShowCount() < elementsPerPage * (page + 1));
-    }
-
-    private CompositeDisposable getCompositeDisposable() {
-        if (mCompositeDisposable == null || mCompositeDisposable.isDisposed()) {
-            mCompositeDisposable = new CompositeDisposable();
-        }
-        return mCompositeDisposable;
     }
 }

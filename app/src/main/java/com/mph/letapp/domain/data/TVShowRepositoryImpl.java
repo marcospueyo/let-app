@@ -36,17 +36,12 @@ public class TVShowRepositoryImpl implements TVShowRepository {
     @NonNull
     private final RestTVShowMapper mMapper;
 
-    @NonNull
-    private final Scheduler mBackgroundThread;
-
     public TVShowRepositoryImpl(@NonNull TVShowService TVShowService,
                                 @NonNull TVShowDao TVShowDao,
-                                @NonNull RestTVShowMapper mapper,
-                                @NonNull Scheduler backgroundThread) {
+                                @NonNull RestTVShowMapper mapper) {
         mTVShowService = TVShowService;
         mTVShowDao = TVShowDao;
         mMapper = mapper;
-        mBackgroundThread = backgroundThread;
     }
 
     private Function<List<TVShow>, List<TVShow>> saveFetchedEntities() {
