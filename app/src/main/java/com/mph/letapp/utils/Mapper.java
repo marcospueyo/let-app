@@ -31,7 +31,13 @@ public abstract class Mapper<T1, T2> {
         return new Function<List<T1>, List<T2>>() {
             @Override
             public List<T2> apply(List<T1> t1s) throws Exception {
-                return map(t1s);
+                List<T1> filteredList = new ArrayList<>();
+                for (T1 t1 : t1s) {
+                    if (t1 != null) {
+                        filteredList.add(t1);
+                    }
+                }
+                return map(filteredList);
             }
         };
     }
