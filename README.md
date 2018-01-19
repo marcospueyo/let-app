@@ -1,3 +1,4 @@
 # LET-APP
-work in progress
 
+
+- The TVShow detail view allows exploring similar shows either by swiping over the show logo or by pressing the side arrows.
