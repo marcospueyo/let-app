@@ -33,9 +33,7 @@ public class GetSingleTVShowInteractorImpl extends Interactor<TVShow>
     @Override
     public void execute(DisposableObserver<TVShow> disposableObserver, String id,
                         boolean forceRefresh) {
-        final Observable<TVShow> observable = mTVShowRepository
-                                                    .getTVShow(id);
+        final Observable<TVShow> observable = mTVShowRepository.getTVShow(id);
         subscribeObserver(observable, disposableObserver);
-
     }
 }
