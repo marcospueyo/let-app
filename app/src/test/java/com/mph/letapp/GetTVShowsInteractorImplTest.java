@@ -14,6 +14,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static org.mockito.Matchers.any;
@@ -35,9 +36,12 @@ public final class GetTVShowsInteractorImplTest {
 
     private GetTVShowsInteractorImpl mGetRepositoriesInteractor;
 
+    private TestTVShowsObserver mTestTVShowsObserver;
+
     @Before
     public void setUp() throws Exception {
         mTVShowRepository = mock(TVShowRepository.class);
+        mTestTVShowsObserver = new TestTVShowsObserver();
         mMainScheduler = Schedulers.trampoline();
         mBackgroundScheduler = Schedulers.trampoline();
         mGetRepositoriesInteractor = new GetTVShowsInteractorImpl(mTVShowRepository,
@@ -61,7 +65,8 @@ public final class GetTVShowsInteractorImplTest {
     public void shouldDeleteRepos() throws Exception {
         when(mTVShowRepository.localTVShowCount()).thenReturn(0);
 
-        mGetRepositoriesInteractor.execute(true, 10, 0);
+        mGetRepositoriesInteractor.execute(mTestTVShowsObserver, true, 10,
+                0);
         verify(mTVShowRepository).clearTVShows();
     }
 
@@ -72,7 +77,8 @@ public final class GetTVShowsInteractorImplTest {
         int elementsPerPage = 10;
         int page = 0;
 
-        mGetRepositoriesInteractor.execute(true, elementsPerPage, page);
+        mGetRepositoriesInteractor.execute(mTestTVShowsObserver, true, elementsPerPage,
+                page);
         verify(mTVShowRepository, times(1))
                 .fetchRemoteTVShows(eq(page), eq(elementsPerPage));
     }
@@ -84,9 +90,26 @@ public final class GetTVShowsInteractorImplTest {
         int elementsPerPage = 10;
         int page = 2;
 
-        mGetRepositoriesInteractor.execute(false, elementsPerPage, page);
+        mGetRepositoriesInteractor.execute(mTestTVShowsObserver, false, elementsPerPage,
+                page);
         verify(mTVShowRepository, never()).fetchRemoteTVShows(anyInt(), anyInt());
         verify(mTVShowRepository, times(1))
                 .getTVShowPage(eq(page), eq(elementsPerPage));
+    }
+
+    private final class TestTVShowsObserver extends DisposableObserver<List<TVShow>> {
+
+        @Override
+        public void onNext(List<TVShow> tvShows) {
+        }
+
+        @Override
+        public void onError(Throwable e) {
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
     }
 }

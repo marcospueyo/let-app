@@ -42,8 +42,6 @@ public final class TVShowRepositoryImplTest {
 
     private TVShowService mTVShowService;
 
-    private Scheduler mBackgroundScheduler;
-
     private int page;
 
     private int elementsPerPage;
@@ -57,13 +55,11 @@ public final class TVShowRepositoryImplTest {
         mTVShowService = mock(TVShowService.class);
         mMapper = new RestTVShowMapper(NetworkModule.POSTER_BASE_URL,
                 NetworkModule.BACKDROP_BASE_URL);
-        mBackgroundScheduler = new TestScheduler();
         page = 1;
         elementsPerPage = 10;
         testObserver = new TestObserver<>();
 
-        mTVShowRepositoryImpl = new TVShowRepositoryImpl(mTVShowService, mTVShowDao, mMapper,
-                mBackgroundScheduler);
+        mTVShowRepositoryImpl = new TVShowRepositoryImpl(mTVShowService, mTVShowDao, mMapper);
     }
 
     @Test
@@ -147,5 +143,3 @@ public final class TVShowRepositoryImplTest {
     }
 
 }
-
-

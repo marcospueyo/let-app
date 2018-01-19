@@ -12,7 +12,8 @@ import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 
-public class GetSingleTVShowInteractorImpl implements GetSingleTVShowInteractor {
+public class GetSingleTVShowInteractorImpl extends Interactor<TVShow>
+        implements GetSingleTVShowInteractor {
 
     @SuppressWarnings("unused")
     public static final String TAG = GetSingleTVShowInteractorImpl.class.getSimpleName();
@@ -21,44 +22,20 @@ public class GetSingleTVShowInteractorImpl implements GetSingleTVShowInteractor 
     @NonNull
     private final TVShowRepository mTVShowRepository;
 
-    @NonNull
-    private final Scheduler mBackgroundThread;
-
-    @NonNull
-    private final Scheduler mMainThread;
-
-    private CompositeDisposable mCompositeDisposable;
 
     public GetSingleTVShowInteractorImpl(@NonNull TVShowRepository tvShowRepository,
                                          @NonNull Scheduler mainThread,
                                          @NonNull Scheduler backgroundThread) {
+        super(mainThread, backgroundThread);
         mTVShowRepository = tvShowRepository;
-        mBackgroundThread = backgroundThread;
-        mMainThread = mainThread;
     }
 
     @Override
     public void execute(DisposableObserver<TVShow> disposableObserver, String id,
                         boolean forceRefresh) {
         final Observable<TVShow> observable = mTVShowRepository
-                                                    .getTVShow(id)
-                                                    .subscribeOn(mBackgroundThread)
-                                                    .observeOn(mMainThread);
-        final DisposableObserver observer = observable.subscribeWith(disposableObserver);
-        getCompositeDisposable().add(observer);
+                                                    .getTVShow(id);
+        subscribeObserver(observable, disposableObserver);
 
-    }
-
-    @Override
-    public void dispose() {
-        if (mCompositeDisposable != null && !mCompositeDisposable.isDisposed()) {
-            mCompositeDisposable.dispose();
-        }
-    }
-    private CompositeDisposable getCompositeDisposable() {
-        if (mCompositeDisposable == null || mCompositeDisposable.isDisposed()) {
-            mCompositeDisposable = new CompositeDisposable();
-        }
-        return mCompositeDisposable;
     }
 }

@@ -1,23 +1,31 @@
 package com.mph.letapp.domain.data;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mph.letapp.domain.data.model.TVShowDao;
 import com.mph.letapp.domain.data.model.TVShow;
 import com.mph.letapp.network.mapper.RestTVShowMapper;
+import com.mph.letapp.network.model.RestTVShow;
 import com.mph.letapp.network.service.TVShowService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 
 public class TVShowRepositoryImpl implements TVShowRepository {
+
+    @SuppressWarnings("unused")
+    private static final String TAG = TVShowRepositoryImpl.class.getSimpleName();
 
     @NonNull
     private final TVShowService mTVShowService;
@@ -28,17 +36,12 @@ public class TVShowRepositoryImpl implements TVShowRepository {
     @NonNull
     private final RestTVShowMapper mMapper;
 
-    @NonNull
-    private final Scheduler mBackgroundThread;
-
     public TVShowRepositoryImpl(@NonNull TVShowService TVShowService,
                                 @NonNull TVShowDao TVShowDao,
-                                @NonNull RestTVShowMapper mapper,
-                                @NonNull Scheduler backgroundThread) {
+                                @NonNull RestTVShowMapper mapper) {
         mTVShowService = TVShowService;
         mTVShowDao = TVShowDao;
         mMapper = mapper;
-        mBackgroundThread = backgroundThread;
     }
 
     private Function<List<TVShow>, List<TVShow>> saveFetchedEntities() {

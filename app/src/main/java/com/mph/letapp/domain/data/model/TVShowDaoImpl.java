@@ -76,8 +76,8 @@ public class TVShowDaoImpl implements TVShowDao {
 
     @Override
     public void insertTVShows(Iterable<TVShow> tvShows) {
-        for (TVShow repository : tvShows) {
-            deleteTVShow(repository.getId());
+        for (TVShow tvShow : tvShows) {
+            deleteTVShow(tvShow.getId());
         }
         mDataStore.insert(tvShows);
     }
