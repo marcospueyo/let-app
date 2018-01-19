@@ -23,9 +23,8 @@ public final class RepositoryModule {
     @Singleton
     TVShowRepository provideTVShowRepository(TVShowService TVShowService,
                                              TVShowDao TVShowDao,
-                                             RestTVShowMapper mapper,
-                                             @Named(BACKGROUND_SCHEDULER) Scheduler scheduler) {
-        return new TVShowRepositoryImpl(TVShowService, TVShowDao, mapper, scheduler);
+                                             RestTVShowMapper mapper) {
+        return new TVShowRepositoryImpl(TVShowService, TVShowDao, mapper);
     }
 
     public interface Exposes {
