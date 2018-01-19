@@ -1,6 +1,7 @@
 package com.mph.letapp.network.service;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mph.letapp.network.model.RestTVShow;
 import com.mph.letapp.network.model.TVShowPageResponse;
@@ -43,7 +44,8 @@ public class TVShowServiceImpl implements TVShowService {
             @Override
             public void subscribe(final ObservableEmitter<List<RestTVShow>> emitter)
                     throws Exception {
-                int servicePage = page + 1; //page numbering is 1-based
+                int servicePage = page + 1 /*9*/; //page numbering is 1-based
+                Log.d(TAG, "subscribe: servicePage=" + String.valueOf(servicePage));
                 Call<TVShowPageResponse> call = mTMDBService.getTVShows(mApiKey, mLanguage,
                         String.valueOf(servicePage));
                 call.enqueue(getTVShowListCallback(emitter));
