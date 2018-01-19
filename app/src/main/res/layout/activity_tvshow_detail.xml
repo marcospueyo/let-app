@@ -27,7 +27,7 @@
             <android.support.v4.widget.Space
                 android:layout_width="0dp"
                 android:layout_height="@dimen/spacing_medium" />
-            <com.mph.letapp.presentation.view.component.TouchableLinearLayout
+            <LinearLayout
                 android:id="@+id/ll_swipe_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                     android:src="@drawable/ic_arrow_right"
                     android:scaleType="fitCenter"
                     android:background="@android:color/transparent"/>
-            </com.mph.letapp.presentation.view.component.TouchableLinearLayout>
+            </LinearLayout>
             <android.support.v4.widget.Space
             android:layout_width="0dp"
             android:layout_height="@dimen/spacing_large" />

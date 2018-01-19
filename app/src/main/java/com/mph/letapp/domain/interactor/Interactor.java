@@ -19,14 +19,12 @@ public abstract class Interactor<T> {
 
     private CompositeDisposable mCompositeDisposable;
 
-    Interactor(@NonNull Scheduler mainThread,
-                      @NonNull Scheduler backgroundThread) {
+    Interactor(@NonNull Scheduler mainThread, @NonNull Scheduler backgroundThread) {
         mBackgroundThread = backgroundThread;
         mMainThread = mainThread;
     }
 
-    void subscribeObserver(Observable<T> observable,
-                                     DisposableObserver<T> disposableObserver) {
+    void subscribeObserver(Observable<T> observable, DisposableObserver<T> disposableObserver) {
         observable
                 .subscribeOn(mBackgroundThread)
                 .observeOn(mMainThread);

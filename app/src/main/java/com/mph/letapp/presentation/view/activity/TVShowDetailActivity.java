@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,7 +22,6 @@ import com.mph.letapp.presentation.TVShowDetailView;
 import com.mph.letapp.presentation.model.TVShowViewModel;
 import com.mph.letapp.presentation.presenter.TVShowDetailPresenter;
 import com.mph.letapp.presentation.view.component.SwipeDetector;
-import com.mph.letapp.presentation.view.component.TouchableLinearLayout;
 
 import java.util.Locale;
 
@@ -54,8 +50,7 @@ public class TVShowDetailActivity extends DaggerActivity implements TVShowDetail
 
     @BindView(R.id.tv_rating) TextView tvRating;
 
-    @BindView(R.id.ll_swipe_area)
-    TouchableLinearLayout llSwipeArea;
+    @BindView(R.id.ll_swipe_area) LinearLayout llSwipeArea;
 
     @BindView(R.id.ib_left) ImageButton ibLeft;
 
