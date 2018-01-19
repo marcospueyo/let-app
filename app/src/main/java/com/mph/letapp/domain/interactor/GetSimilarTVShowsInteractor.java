@@ -4,9 +4,12 @@ import com.mph.letapp.domain.data.model.TVShow;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.observers.DisposableObserver;
 
 public interface GetSimilarTVShowsInteractor {
 
-    Observable<List<TVShow>> execute(String tvShowID, int page, int elementsPerPage);
+    void execute(DisposableObserver<List<TVShow>> observer, String tvShowID,
+                 int page, int elementsPerPage);
+
+    void dispose();
 }
