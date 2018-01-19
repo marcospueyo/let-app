@@ -9,9 +9,7 @@ public interface TVShowDao {
 
     Observable<List<TVShow>> getTVShows(int page, int elementsPerPage);
 
-    Single<TVShow> getTVShow(String id);
-
-    Observable<TVShow> getTVShowObs(String id);
+    Observable<TVShow> getTVShow(String id);
 
     void deleteAllTVShows();
 

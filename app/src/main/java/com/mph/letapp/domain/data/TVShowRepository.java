@@ -13,9 +13,7 @@ public interface TVShowRepository {
 
     Observable<List<TVShow>> getAll();
 
-    Single<TVShow> getTVShow(String id);
-
-    Observable<TVShow> getLocalEntityObs(String id);
+    Observable<TVShow> getTVShow(String id);
 
     Observable<List<TVShow>> getTVShowPage(int page, int maxCount);
 

@@ -14,13 +14,13 @@ import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 public class TVShowListPresenterImpl implements TVShowListPresenter {
 
     public static final String TAG = "TVShowListPresenterImpl";
 
-    @NonNull
-    private final TVShowListView mView;
+    private TVShowListView mView;
 
     @NonNull
     private final GetTVShowsInteractor mGetTVShowsInteractor;
@@ -63,6 +63,7 @@ public class TVShowListPresenterImpl implements TVShowListPresenter {
 
     @Override
     public void destroy() {
+        mGetTVShowsInteractor.dispose();
     }
 
     @Override
@@ -90,42 +91,70 @@ public class TVShowListPresenterImpl implements TVShowListPresenter {
 
 
     private void loadTVShows(final boolean forceRefresh, final boolean concatOperation) {
-        mFetchInProcess = true;
-        final int prevPage = mCurrentPage;
+        setFetchProcessState(true);
+        mGetTVShowsInteractor.execute(new TVShowsObserver(concatOperation), forceRefresh,
+                mTVShowsPerPage, mCurrentPage);
+    }
 
-        mGetTVShowsInteractor
-                .execute(forceRefresh, mTVShowsPerPage, mCurrentPage)
-                .subscribe(new Observer<List<TVShow>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-            }
+    private void handleFetchEnded() {
+        setFetchProcessState(false);
+        setViewLoadingState(false);
+    }
 
-            @Override
-            public void onNext(List<TVShow> tvShows) {
-                mView.hideProgress();
-                List<TVShowViewModel> viewModels = mMapper.reverseMap(tvShows);
-                if (concatOperation) {
-                    mView.addTVShows(viewModels);
-                }
-                else {
-                    mView.showTVShows(viewModels);
-                }
-                if (tvShows.size() > 0) {
-                    mCurrentPage = prevPage + 1;
-                }
-                mFetchInProcess = false;
-            }
+    private void updateViewWithLoadError() {
+        mView.showLoadError();
+    }
 
-            @Override
-            public void onError(Throwable e) {
-                mView.hideProgress();
-                mView.showLoadError();
-                mFetchInProcess = false;
-            }
+    private void setFetchProcessState(boolean isLoading) {
+        mFetchInProcess = isLoading;
+    }
 
-            @Override
-            public void onComplete() {
-            }
-        });
+    private void setViewLoadingState(boolean isLoading) {
+        if (isLoading) {
+            mView.showProgress();
+        }
+        else {
+            mView.hideProgress();
+        }
+    }
+
+    private void handleFetchedData(List<TVShow> list, boolean concatOperation) {
+        List<TVShowViewModel> viewModels = mMapper.reverseMap(list);
+        if (concatOperation) {
+            mView.addTVShows(viewModels);
+        }
+        else {
+            mView.showTVShows(viewModels);
+        }
+        if (list.size() > 0) {
+            mCurrentPage++;
+        }
+    }
+
+
+    private final class TVShowsObserver extends DisposableObserver<List<TVShow>> {
+
+        private final boolean mConcatOperation;
+
+        public TVShowsObserver(boolean concatOperation) {
+            mConcatOperation = concatOperation;
+        }
+
+        @Override
+        public void onNext(List<TVShow> tvShows) {
+            TVShowListPresenterImpl.this.handleFetchEnded();
+            TVShowListPresenterImpl.this.handleFetchedData(tvShows, mConcatOperation);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            TVShowListPresenterImpl.this.handleFetchEnded();
+            TVShowListPresenterImpl.this.updateViewWithLoadError();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
     }
 }

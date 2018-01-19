@@ -1,7 +1,6 @@
 package com.mph.letapp.presentation.presenter;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.mph.letapp.domain.data.model.TVShow;
 import com.mph.letapp.domain.interactor.GetSimilarTVShowsInteractor;
@@ -9,22 +8,17 @@ import com.mph.letapp.domain.interactor.GetSingleTVShowInteractor;
 import com.mph.letapp.presentation.TVShowDetailView;
 import com.mph.letapp.presentation.mapper.TVShowViewModelMapper;
 import com.mph.letapp.presentation.model.TVShowViewModel;
-import com.mph.letapp.presentation.navigation.Router;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
 
 public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
 
     @SuppressWarnings("unused")
     public static final String TAG = TVShowDetailPresenterImpl.class.getSimpleName();
 
-    @NonNull
-    private final TVShowDetailView mView;
+    private TVShowDetailView mView;
 
     @NonNull
     TVShowViewModelMapper mMapper;
@@ -83,7 +77,9 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
 
     @Override
     public void destroy() {
-
+        mGetSimilarTVShowsInteractor.dispose();
+        mGetSingleTVShowInteractor.dispose();
+        mView = null;
     }
 
     @Override
@@ -110,8 +106,24 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
         return (mCurrentIndex + 1) >= mTVShows.size();
     }
 
+    private void handleFetchedData(List<TVShow> list) {
+        saveFetchedPage(mMapper.reverseMap(list));
+        if (list.size() > 0) {
+            mCurrentPage++;
+            showNextSimilarTVShow();
+        }
+        else {
+            showNoSimilarTVShows();
+        }
+    }
+
     private void saveFetchedPage(List<TVShowViewModel> list) {
         mTVShows.addAll(list);
+    }
+
+    private void handleFetchedSingleShow(TVShow tvShow) {
+        saveOriginalTVShow(mMapper.reverseMap(tvShow));
+        showOriginalTVShow();
     }
 
     private void saveOriginalTVShow(TVShowViewModel tvShow) {
@@ -153,61 +165,14 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
 
     private void loadTVShow() {
         handleFetchStarted();
-
-        mGetSingleTVShowInteractor
-            .execute(mOriginalTVShowID, false)
-            .doOnSuccess(new Consumer<TVShow>() {
-                @Override
-                public void accept(TVShow tvShow) throws Exception {
-                    handleFetchCompleted();
-                    saveOriginalTVShow(mMapper.reverseMap(tvShow));
-                    showOriginalTVShow();
-                }
-            })
-            .doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(Throwable throwable) throws Exception {
-                    handleFetchCompleted();
-                    updateViewWithLoadError();
-                }
-        }).subscribe();
+        mGetSingleTVShowInteractor.execute(new SingleTVShowObserver(), mOriginalTVShowID,
+                false);
     }
 
     private void loadSimilarTVShows() {
         setFetchProcessState(true);
-        final int prevPage = mCurrentPage;
-        mGetSimilarTVShowsInteractor
-                .execute(mOriginalTVShowID, mTVShowsPerPage, mCurrentPage)
-                .subscribe(new Observer<List<TVShow>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<TVShow> tvShows) {
-                        handleFetchCompleted();
-                        saveFetchedPage(mMapper.reverseMap(tvShows));
-                        if (tvShows.size() > 0) {
-                            mCurrentPage = prevPage + 1;
-                            showNextSimilarTVShow();
-                        }
-                        else {
-                            showNoSimilarTVShows();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        handleFetchCompleted();
-                        updateViewWithLoadError();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        mGetSimilarTVShowsInteractor.execute(new SimilarTVShowsObserver(), mOriginalTVShowID,
+                mTVShowsPerPage, mCurrentPage);
     }
 
     private void handleFetchStarted() {
@@ -215,7 +180,7 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
         setViewLoadingState(true);
     }
 
-    private void handleFetchCompleted() {
+    private void handleFetchEnded() {
         setFetchProcessState(false);
         setViewLoadingState(false);
     }
@@ -243,5 +208,45 @@ public class TVShowDetailPresenterImpl implements TVShowDetailPresenter {
 
     private void showNoSimilarTVShows() {
         mView.showNoSimilarShows();
+    }
+
+    private final class SimilarTVShowsObserver extends DisposableObserver<List<TVShow>> {
+
+        @Override
+        public void onNext(List<TVShow> tvShows) {
+            TVShowDetailPresenterImpl.this.handleFetchEnded();
+            TVShowDetailPresenterImpl.this.handleFetchedData(tvShows);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            TVShowDetailPresenterImpl.this.handleFetchEnded();
+            TVShowDetailPresenterImpl.this.updateViewWithLoadError();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    }
+
+    private final class SingleTVShowObserver extends DisposableObserver<TVShow> {
+
+        @Override
+        public void onNext(TVShow tvShow) {
+            TVShowDetailPresenterImpl.this.handleFetchEnded();
+            TVShowDetailPresenterImpl.this.handleFetchedSingleShow(tvShow);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            TVShowDetailPresenterImpl.this.handleFetchEnded();
+            TVShowDetailPresenterImpl.this.updateViewWithLoadError();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
     }
 }
